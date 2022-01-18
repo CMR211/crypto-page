@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+
+import ContentWrapper from './Components/ContentWrapper.js'
+import ContextProvider from './Components/ContextProvider.js';
+import './main.css'
 
 function App() {
+
+  const [locale, setLocale] = React.useState('en')
+  function toggleLocale () {
+    if (locale === 'en') {setLocale('pl')} else {setLocale('en')}
+  }
+
+  const value = React.useMemo(() => ({
+    locale,
+    toggleLocale
+  }), [locale])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContextProvider.Provider value={value}>
+      <ContentWrapper />
+    </ContextProvider.Provider>
   );
 }
 
