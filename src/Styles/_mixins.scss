@@ -1,0 +1,22 @@
+@mixin subtitle{
+  font-family: inherit;
+  font-size: 1.2rem;
+  color: $color-font-main;
+}
+
+@mixin title{
+  font-size: 1.5rem;
+  color: $color-font-main;
+}
+
+@mixin red-gradient {
+  background: linear-gradient(45deg, $color-accent-1a, $color-accent-1b );
+}
+
+@mixin blue-gradient{
+  background: linear-gradient(45deg, $color-accent-2a, $color-accent-2b );
+}
+
+@mixin green-gradient{
+  background: linear-gradient(45deg, $color-accent-3a, $color-accent-3b );
+}

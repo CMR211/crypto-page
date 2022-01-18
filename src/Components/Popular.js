@@ -1,9 +1,14 @@
 import React from 'react'
+import ContextProvider from './ContextProvider'
 
 export default function Popular() {
+
+  const {data} = React.useContext(ContextProvider)
+
   return (
-    <div className='popular'>
-      <h1>Watch popular crypto live!</h1>
+    <div className='page popular'>
+      <h1>Most popular cryptocurrency</h1>
+      
     </div>
   )
 }

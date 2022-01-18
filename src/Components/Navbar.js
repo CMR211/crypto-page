@@ -18,20 +18,25 @@ const navbarItems = [
 
 export default function Navbar() {
 
-  const {locale, toggleLocale} = React.useContext(ContextProvider)
+  const {locale, toggleLocale, navbarState, setNavbarState} = React.useContext(ContextProvider)
+
+  function toggleNavbarState () {
+    if (navbarState === 'desktop') setNavbarState('mobile');
+    if (navbarState === 'mobile') setNavbarState('desktop') 
+  }
+
 
   return (
-    <div className='nav'>
+    <div className={`nav nav__${navbarState}`} >
 
-        {navbarItems.map((item, index) => {return(
-          <button 
-          key={`navbarItems-${index}`} 
-          className={`nav__item nav__item${index+1}`}
-          onClick={() => toggleLocale()}
-          >
-            {`${item[locale]}`}
-          </button>
-        )})}
+            {navbarItems.map((item, index) => {return(
+              <button 
+              key={`navbarItems-${index}`} 
+              className={`nav__item nav__item${index+1}`}
+              onClick={() => toggleNavbarState()}>
+                {`${item[locale]}`}
+              </button>
+            )})}
 
     </div>
   )
