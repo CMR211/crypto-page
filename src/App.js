@@ -6,10 +6,12 @@ import './main.css'
 
 function App() {
 
-  const [data, setData] = React.useState();
+  // cryptocurrency data state
+  const [cryptoData, setCryptoData] = React.useState();
 
-  const fetchOptions = {
-    url: 'https://api.coingecko.com/api/v3/coins/ethereum/tickers?exchange_ids=binance',
+  // fetch options for cryptocurrency API call
+  const fetchOptionsCrypto = {
+    url: 'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd&include_market_cap=true&include_24hr_change=true',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Accept': 'json/text',
@@ -17,33 +19,54 @@ function App() {
     }
   }
 
+  // fetching on app load
   React.useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(fetchOptions.url,  fetchOptions)
+
+    // fetch cryptocurrency data (function declaration)
+    async function fetchCryptoData(token) {
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`,
+        fetchOptionsCrypto.headers
+      )
       const json = await response.json()
-      setData(json)
+      setCryptoData(json)
     };
-    fetchData();
-    console.log(data)
-  }, []);
 
-  const [locale, setLocale] = React.useState('en')
-  function toggleLocale () {
-    if (locale === 'en') {setLocale('pl')} else {setLocale('en')}
-  }
+    // fetch cryptocurrency data (function invoke)
+    fetchCryptoData('bitcoin,ethereum,cardano,ripple,binancecoin,solana,polkadot,dogecoin');
 
+    //todo: stock data: financialmodelingprep ... fmp
+
+  }, []); // to fetch just once
+
+  // i can add new global state in the context which will be -1 or +1 and a button to change the state,
+  // then it is possible to add a listener here in useEffect so that i can have refresh button
+
+  // todo: ad locale button (is it necessary though?)
+  // const [locale, setLocale] = React.useState('en')
+  // function toggleLocale () {
+  //   if (locale === 'en') {setLocale('pl')} else {setLocale('en')}
+  // }
+
+  // todo: add navbar with mobile and dekstop version with states
   const [navbarState, setNavbarState] = React.useState('desktop')
+
+  // current page global state
   const [page, setPage] = React.useState('landing-page')
 
+  // useMemo to store all the global variables
   const value = React.useMemo(() => ({
-    locale,
-    toggleLocale,
+    // locale,
+    // toggleLocale,
     navbarState,
     setNavbarState,
     page,
     setPage,
-    data
-  }), [locale, navbarState, page])
+    cryptoData,
+  }), [
+    // locale, 
+    navbarState, 
+    page])
 
   return (
     <ContextProvider.Provider value={value}>

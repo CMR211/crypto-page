@@ -2,7 +2,8 @@ import React from 'react'
 import Navbar from './Navbar.js'
 import LandingPage from './LandingPage.js'
 import ContextProvider from './ContextProvider.js'
-import Popular from './Popular.js'
+import PopularCrypto from './PopularCrypto.js'
+import PopularStock from './PopularStock.js'
 
 export default function ContentWrapper() {
 
@@ -11,7 +12,8 @@ export default function ContentWrapper() {
   return (
     <>
       {(page === 'landing-page') && <LandingPage />}
-      {(page === 'popular') && <Popular />}
+      {(page === 'popular-crypto') && <PopularCrypto />}
+      {(page === 'popular-stock') && <PopularStock />}
       {/* <Navbar /> */}
     
     </>
