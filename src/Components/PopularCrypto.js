@@ -9,7 +9,7 @@ export default function PopularCrypto() {
   return (
     <div className='page popular'>
 
-      <h1>Most popular</h1>
+      <h1>Most popular cryptos</h1>
 
       <div className='popular__container'>
         {Object.keys(cryptoData).sort().map((key, index) => { return (

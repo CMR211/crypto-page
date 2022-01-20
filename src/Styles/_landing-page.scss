@@ -1,18 +1,42 @@
 .landing-page {
   background-image: url('../public/assets/landing-page-image.svg');
   background-position: right -40px bottom -5px;
-  background-size: 50%;
+  background-size: 80%;
   background-repeat: no-repeat;
   background-blend-mode: lighten;
   h1 {
-    font-size: 65px;
+    font-size: clamp(30px,10vw,65px);
     margin-bottom: 3rem;
   }
   p {
     margin-bottom: 3rem;
     line-height: 200%;
+    font-size: clamp(12px, 3vw, 16px)
   }
-  button {
-    margin-left: auto;
+  &__btn-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    margin: 0;
+    p {
+      margin: 0;
+      text-align: center;
+    }
+    button {
+      min-width: 5rem;
+    }
+  }
+}
+
+@media (min-width: 800px) {
+  .landing-page {
+    background-size: 50%;
+  }
+  .landing-page__btn-container {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

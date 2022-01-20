@@ -14,7 +14,7 @@ export default function ContentWrapper() {
       {(page === 'landing-page') && <LandingPage />}
       {(page === 'popular-crypto') && <PopularCrypto />}
       {(page === 'popular-stock') && <PopularStock />}
-      {/* <Navbar /> */}
+      {(page !== 'landing-page') && <Navbar />}
     
     </>
   )

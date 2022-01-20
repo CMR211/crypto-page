@@ -2,40 +2,30 @@ import React from 'react'
 import ContextProvider from './ContextProvider'
 
 const navbarItems = [
-  {
-    en: 'Popular crypto',
-    pl: 'Popularne crypto',
-  },
-  {
-    en: 'Portfolio',
-    pl: 'Portfolio',
-  },
-  {
-    en: 'Set your portfolio',
-    pl: 'Ustaw swoje portfolio',
-  }
+  ['Home', 'fas fa-home', 'landing-page'],
+  ['Popular cryptos', 'fab fa-bitcoin', 'popular-crypto'],
+  ['Popular stocks', 'fas fa-landmark', 'popular-stock']
 ]
 
 export default function Navbar() {
 
-  const {locale, toggleLocale, navbarState, setNavbarState} = React.useContext(ContextProvider)
-
-  function toggleNavbarState () {
-    if (navbarState === 'desktop') setNavbarState('mobile');
-    if (navbarState === 'mobile') setNavbarState('desktop') 
-  }
-
+  const {setPage} = React.useContext(ContextProvider)
 
   return (
-    <div className={`nav nav__${navbarState}`} >
+    <div className={`nav`} >
 
             {navbarItems.map((item, index) => {return(
-              <button 
-              key={`navbarItems-${index}`} 
-              className={`nav__item nav__item${index+1}`}
-              onClick={() => toggleNavbarState()}>
-                {`${item[locale]}`}
-              </button>
+              <>
+                
+                <button 
+                key={`navbarItems-${index}`} 
+                className={`nav__item nav__item${index+1}=`}
+                onClick={() => setPage(item[2])}>
+                  <i className={item[1]}></i>
+                  <span className='nav__item__text'>{`${item[0]}`}</span>
+                </button>
+              </>
+              
             )})}
 
     </div>

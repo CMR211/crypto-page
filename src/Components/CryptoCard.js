@@ -24,19 +24,21 @@ export default function CryptoCard( {token} ) {
   }
 
   return (
-    <div className={`popular-card popular-card-${token}`} onClick={event => window.location.href = gotoLink()}>
+    <a className='popular-card__link' href={gotoLink()}>
+      <div className={`popular-card popular-card-${token}`} onClick={event => window.location.href = gotoLink()}>
 
-      <img className='popular-card__icon' src={`/assets/${token}.png`} alt={`${token}-icon`} />
+        <img className='popular-card__icon' src={`/assets/${token}.png`} alt={`${token}-icon`} />
 
-      <p className='popular-card__title'>{token.toUpperCase()}</p>
+        <p className='popular-card__title'>{token.toUpperCase()}</p>
 
-      <p className='popular-card__price'>
-        {cryptoData[token].usd.toLocaleString()}
-        <span className='popular-card__price__usd'>USD</span>
-      </p>
+        <p className='popular-card__price'>
+          {cryptoData[token].usd.toLocaleString()}
+          <span className='popular-card__price__usd'>USD</span>
+        </p>
 
-      <p className={'popular-card__change ' + getChangeColor()}>{`(${change24}%)`}</p>
+        <p className={'popular-card__change ' + getChangeColor()}>{`(${change24}%)`}</p>
 
-    </div>
+      </div>
+    </a>
   )
 }

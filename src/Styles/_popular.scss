@@ -8,7 +8,7 @@
 .popular__container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  align-items: center;
+  justify-items: flex-start;
   row-gap: 2rem;
   column-gap: 3rem;
 
@@ -34,6 +34,12 @@
     transform: scale(1.05)
   }
 
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit
+  }
+
   &__icon {
     align-self: center;
     justify-self: center;
@@ -45,7 +51,14 @@
   &__title {
     grid-column: 2 / span 2;
     letter-spacing: 2px;
-    transition: 300ms;
+  }
+
+  &__title--stock {
+    grid-column: 2 / span 2;
+    line-height: 1.1;
+    &name {
+      font-size: 0.7rem;
+    }
   }
 
   &__price {
