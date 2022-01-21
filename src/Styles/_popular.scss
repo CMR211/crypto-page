@@ -8,7 +8,8 @@
 .popular__container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  justify-items: flex-start;
+  // justify-items: flex-start;
+  justify-items: stretch;
   row-gap: 2rem;
   column-gap: 3rem;
 

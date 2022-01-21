@@ -26,6 +26,7 @@ body {
   background: linear-gradient(135deg, $color-accent-1a, $color-accent-1b);
   min-height: 100vh;
   width: 100%;
+  overflow-x: hidden;
 }
 
 #root {
@@ -36,4 +37,5 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
