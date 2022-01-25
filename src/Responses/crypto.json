@@ -1,0 +1,42 @@
+{
+    "solana": {
+        "usd": 90.94,
+        "usd_market_cap": 28686927499.860683,
+        "usd_24h_change": 3.767159861078055
+    },
+    "binancecoin": {
+        "usd": 365.3,
+        "usd_market_cap": 61165275756.72235,
+        "usd_24h_change": 0.4437037128367513
+    },
+    "ethereum": {
+        "usd": 2392.38,
+        "usd_market_cap": 285418718556.49475,
+        "usd_24h_change": -0.18323762931264181
+    },
+    "bitcoin": {
+        "usd": 36117,
+        "usd_market_cap": 684799831239.7109,
+        "usd_24h_change": 2.8968804373504513
+    },
+    "polkadot": {
+        "usd": 18.0,
+        "usd_market_cap": 19432712549.96288,
+        "usd_24h_change": 4.381204564457246
+    },
+    "dogecoin": {
+        "usd": 0.134287,
+        "usd_market_cap": 17865909828.226254,
+        "usd_24h_change": -0.5992473035769705
+    },
+    "ripple": {
+        "usd": 0.595561,
+        "usd_market_cap": 28430248138.624577,
+        "usd_24h_change": -0.24529238744183482
+    },
+    "cardano": {
+        "usd": 1.02,
+        "usd_market_cap": 32949595286.35863,
+        "usd_24h_change": -1.7072561542956877
+    }
+}

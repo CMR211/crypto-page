@@ -26,7 +26,7 @@
   background: #fcede0;
 }
 
-.page {
+.page, .modal {
   margin: 2rem;
   max-width: 40rem;
   width: calc(100% - 4rem);
@@ -99,7 +99,7 @@
   }
 }
 @media (max-width: 900px) {
-  .page {
+  .page, .modal {
     margin-bottom: 6rem;
   }
 
@@ -190,7 +190,7 @@
   column-gap: 3rem;
 }
 
-.popular-card {
+.popular-card, .asset {
   display: grid;
   column-gap: 1rem;
   padding: 0.5rem;
@@ -204,7 +204,7 @@
   cursor: pointer;
   transition: 300ms ease-in-out;
 }
-.popular-card:hover {
+.popular-card:hover, .asset:hover {
   background-color: #fcede0;
   transform: scale(1.05);
 }
@@ -234,7 +234,7 @@
 .popular-card__price {
   font-size: 1.3rem;
 }
-.popular-card__price__usd {
+.popular-card__price__usd, .asset__prices__usd {
   font-size: 0.8rem;
   margin-left: 0.3rem;
 }
@@ -249,6 +249,94 @@
   color: green;
 }
 
+.safe > p:first-of-type {
+  margin: 1rem 0;
+}
+
+.safe__add-asset {
+  border: dashed 3px silver;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: transparent;
+}
+.safe__add-asset i {
+  font-size: 2rem;
+}
+.safe__add-asset:focus {
+  border: 3px solid silver;
+  outline: none;
+  transform: scale(1.1);
+}
+
+.text-red {
+  color: red;
+}
+
+.text-green {
+  color: green;
+}
+
+.asset {
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr);
+  column-gap: 1rem;
+  border: 2px solid #fcede0;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+.asset:hover {
+  border: 2px solid transparent;
+}
+.asset * {
+  grid-column: 2/span 1;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.asset__circle {
+  background: #fcede0;
+  width: 100px;
+  height: 100px;
+  font-size: 33.3333333333px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  grid-column: 1/2;
+  grid-row: 1/span 4;
+  justify-self: center;
+}
+.asset__title {
+  grid-row: 1;
+}
+.asset__have {
+  grid-row: 2/span 2;
+}
+.asset__current {
+  grid-row: 4/span 1;
+}
+.asset__change {
+  grid-column: 3/span 1;
+  grid-row: 1/span 2;
+  justify-self: end;
+  align-self: start;
+  font-size: 1.3rem;
+}
+
+.asset__prices__text {
+  font-size: 0.9rem;
+}
 * {
   padding: 0;
   margin: 0;
