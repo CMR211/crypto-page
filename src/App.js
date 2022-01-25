@@ -95,6 +95,38 @@ function App() {
     }, []) // to fetch just once
     // ---------------------------------------------------
 
+    // ---------------------------------------------------
+    // fetch Coins List
+    const [cryptoList, setCryptoList] = React.useState()
+    const fetchOptionsCryptoList = {
+        url: 'https://api.coingecko.com/api/v3/coins/list',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'json/text',
+            'Content-type': 'json/text',
+        },
+    }
+    React.useEffect(() => {
+        // fetch cryptocurrency data (function declaration)
+        async function fetchCryptoList() {
+            try {
+                const response = await fetch(
+                    fetchOptionsCryptoList.url,
+                    fetchOptionsCryptoList.headers
+                )
+                const json = await response.json()
+                setTimeout(() => {setCryptoList(json); console.log(cryptoList)}, 300)
+            } catch (e) {
+                console.log('Fetching Stock Data failed.', e)
+            }
+        }
+
+        // fetch cryptocurrency coins list (function invoke)
+        fetchCryptoList()
+
+    }, []) // to fetch just once
+
+
     // i can add new global state in the context which will be -1 or +1 and a button to change the state,
     // then it is possible to add a listener here in useEffect so that i can have refresh button
 
@@ -113,6 +145,7 @@ function App() {
             page,
             setPage,
             cryptoData,
+            cryptoList,
             stockData,
         }),
         [page]

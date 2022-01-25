@@ -3,15 +3,6 @@ import ContextProvider from './ContextProvider'
 import AssetCard from './AssetCard'
 import AddAssetModal from './AddAssetModal'
 
-function AddAsset() {
-    return (
-        <button className='popular-card safe__add-asset'>
-            <span>Add new asset</span>
-            <i className='fas fa-plus-circle'></i>
-        </button>
-    )
-}
-
 export default function Safe() {
     const testAsset = {
         type: 'crypto',
@@ -25,7 +16,7 @@ export default function Safe() {
         ],
     }
 
-    const { stockData, cryptoData } = React.useContext(ContextProvider)
+    const { stockData, cryptoData, setPage } = React.useContext(ContextProvider)
     const [assets, setAssets] = React.useState([testAsset])
     const [showModal, setShowModal] = React.useState(true)
 
@@ -33,9 +24,18 @@ export default function Safe() {
         return <AssetCard asset={asset} key={'asset' + index} />
     })
 
+    function AddAsset() {
+        return (
+            <button className='popular-card safe__add-asset' onClick={() => setPage('add')}>
+                <span>Add new asset</span>
+                <i className='fas fa-plus-circle'></i>
+            </button>
+        )
+    }
+
     return (
         <>
-        <AddAssetModal />
+        {/* <AddAssetModal /> */}
             <div className='page safe'>
                 <h1>Personal assets</h1>
                 <p>
