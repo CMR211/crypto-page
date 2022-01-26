@@ -1,7 +1,8 @@
 import React from 'react'
 import ContextProvider from './ContextProvider'
 import AssetCard from './AssetCard'
-import AddAssetModal from './AddAssetModal'
+import { pageAnimation } from '../Functions/framerVariants'
+import { motion } from 'framer-motion'
 
 export default function Safe() {
     const testAsset = {
@@ -16,9 +17,21 @@ export default function Safe() {
         ],
     }
 
-    const { stockData, cryptoData, setPage } = React.useContext(ContextProvider)
-    const [assets, setAssets] = React.useState([testAsset])
-    const [showModal, setShowModal] = React.useState(true)
+    const { setPage, personalCrypto } =
+        React.useContext(ContextProvider)
+    const [assets, setAssets] = React.useState([])
+
+    React.useEffect(() => {
+        const array = []
+        setAssets([])
+        for (let i = 0; i < localStorage.length; i++) {
+            array.push(localStorage.key(i))
+        }
+        array.forEach((item) => {
+            const obj = JSON.parse(localStorage.getItem(item))
+            setAssets((prevAssets) => [...prevAssets, obj])
+        })
+    }, [localStorage])
 
     const mappedAssets = assets.map((asset, index) => {
         return <AssetCard asset={asset} key={'asset' + index} />
@@ -26,7 +39,9 @@ export default function Safe() {
 
     function AddAsset() {
         return (
-            <button className='popular-card safe__add-asset' onClick={() => setPage('add')}>
+            <button
+                className='popular-card safe__add-asset'
+                onClick={() => setPage('add')}>
                 <span>Add new asset</span>
                 <i className='fas fa-plus-circle'></i>
             </button>
@@ -35,8 +50,13 @@ export default function Safe() {
 
     return (
         <>
-        {/* <AddAssetModal /> */}
-            <div className='page safe'>
+            {/* <AddAssetModal /> */}
+            <motion.div
+                className='page safe'
+                initial={pageAnimation.hidden}
+                animate={pageAnimation.visible}
+                exit={pageAnimation.exited}
+                transition={pageAnimation.transition}>
                 <h1>Personal assets</h1>
                 <p>
                     Click to add your asset (stock or crypto). Specify the price
@@ -47,7 +67,7 @@ export default function Safe() {
                     {mappedAssets}
                     {assets.length < 8 ? AddAsset() : ''}
                 </div>
-            </div>
+            </motion.div>
         </>
     )
 }

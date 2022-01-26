@@ -26,7 +26,7 @@
   background: #fcede0;
 }
 
-.page, .modal {
+.page, .add-asset-modal {
   margin: 2rem;
   max-width: 40rem;
   width: calc(100% - 4rem);
@@ -99,7 +99,7 @@
   }
 }
 @media (max-width: 900px) {
-  .page, .modal {
+  .page, .add-asset-modal {
     margin-bottom: 6rem;
   }
 
@@ -337,6 +337,72 @@
 .asset__prices__text {
   font-size: 0.9rem;
 }
+.add-asset-modal {
+  width: auto;
+}
+.add-asset-modal button,
+.add-asset-modal input,
+.add-asset-modal select,
+.add-asset-modal textarea {
+  font-family: inherit;
+  color: inherit;
+  font-size: 100%;
+  padding: 0.5rem 1rem;
+}
+.add-asset-modal h1 {
+  margin-bottom: 1rem;
+}
+.add-asset-modal div {
+  margin-bottom: 1rem;
+}
+.add-asset-modal p {
+  margin-bottom: 0.5rem;
+}
+.add-asset-modal .form__radio-container {
+  margin-bottom: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.add-asset-modal input + label {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+.add-asset-modal .form__input {
+  border: none;
+  border-left: 8px solid transparent;
+  width: 100%;
+}
+.add-asset-modal .form__input:focus {
+  border-left: 8px solid #fadfef;
+  outline: none;
+}
+.add-asset-modal input[type=radio] {
+  width: 15px;
+  height: 15px;
+}
+.add-asset-modal button {
+  border: none;
+  width: 100%;
+  border-radius: 0.5rem;
+  background: #fadfef;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: 300ms;
+}
+.add-asset-modal button:hover {
+  transform: scale(1.1);
+}
+
+.form__error {
+  --display: block;
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+  text-align: right;
+  display: var(--display);
+}
+
 * {
   padding: 0;
   margin: 0;

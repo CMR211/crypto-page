@@ -2,7 +2,8 @@ import React from 'react'
 import ContextProvider from './ContextProvider'
 
 export default function AssetCard({ asset }) {
-    const { stockData, cryptoData } = React.useContext(ContextProvider)
+    const { personalCrypto } = React.useContext(ContextProvider)
+    console.log(personalCrypto)
 
     const { name, type, symbol, prices } = asset
 
@@ -15,7 +16,7 @@ export default function AssetCard({ asset }) {
                 100
         ) / 100
 
-    const currentPrice = cryptoData[name].usd
+    const currentPrice = personalCrypto[name].usd
 
     const profit =
         Math.round(totalVolume * (currentPrice - avgPrice) * 100) / 100
@@ -48,7 +49,7 @@ export default function AssetCard({ asset }) {
                         {`${totalVolume.toLocaleString()} ${symbol.toUpperCase()} @ ${avgPrice.toLocaleString()}`}
                     </span>
                     <span className='asset__prices__avg-price'>
-                        {/* {price.toLocaleString()} */}
+                        {personalCrypto[name].usd.toLocaleString()}
                     </span>
                     <span className='asset__prices__usd'>USD</span>
                 </p>

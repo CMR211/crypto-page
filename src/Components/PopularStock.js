@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import {pageAnimation} from '../Functions/framerVariants'
 
 export default function PopularStock() {
-    const { stockData } = React.useContext(ContextProvider)
+    const { popularStockData } = React.useContext(ContextProvider)
     // format:
     // change: -1.0347117
     // name: "Apple Inc."
@@ -21,7 +21,7 @@ export default function PopularStock() {
             <h1>Most popular stocks</h1>
 
             <div className='popular__container'>
-                {stockData.map((object, index) => {
+                {popularStockData.map((object, index) => {
                     return (
                         <StockCard
                             stock={object}

@@ -1,3 +1,67 @@
-.modal {
+.add-asset-modal {
     @extend .page;
+    width: auto;
+    button,
+    input,
+    select,
+    textarea {
+        font-family: inherit;
+        color: inherit;
+        font-size: 100%;
+        padding: 0.5rem 1rem;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    div {
+        margin-bottom: 1rem;
+    }
+    p {
+        margin-bottom: 0.5rem;
+    }
+    .form__radio-container {
+        margin-bottom: 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    input + label {
+        margin-left: 0.5rem;
+        cursor: pointer;
+    }
+    .form__input {
+        border: none;
+        // border-radius: 0.5rem;
+        border-left: 8px solid transparent;
+        width: 100%;
+        &:focus {
+            border-left: 8px solid $color-accent-1a;
+            outline: none;
+        }
+    }
+    input[type='radio'] {
+        width: 15px;
+        height: 15px;
+    }
+    button {
+        border: none;
+        width: 100%;
+        border-radius: 0.5rem;
+        background: $color-accent-1a;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: 300ms;
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}
+
+.form__error {
+    --display: block;
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    text-align: right;
+    display: var(--display);
 }
