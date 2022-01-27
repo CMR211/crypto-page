@@ -5,35 +5,9 @@ import { pageAnimation } from '../Functions/framerVariants'
 import { motion } from 'framer-motion'
 
 export default function Safe() {
-    const testAsset = {
-        type: 'crypto',
-        symbol: 'eth',
-        name: 'ethereum',
-        prices: [
-            { volume: 0.00885302, price: 2863.5244 },
-            { volume: 0.0638755, price: 2679.1694 },
-            { volume: 0.03559948, price: 8216.4137 / 3.8214 },
-            { volume: 0.03183186, price: 2902.1679 },
-        ],
-    }
+    const { setPage, personalAssets } = React.useContext(ContextProvider)
 
-    const { setPage, personalCrypto } =
-        React.useContext(ContextProvider)
-    const [assets, setAssets] = React.useState([])
-
-    React.useEffect(() => {
-        const array = []
-        setAssets([])
-        for (let i = 0; i < localStorage.length; i++) {
-            array.push(localStorage.key(i))
-        }
-        array.forEach((item) => {
-            const obj = JSON.parse(localStorage.getItem(item))
-            setAssets((prevAssets) => [...prevAssets, obj])
-        })
-    }, [localStorage])
-
-    const mappedAssets = assets.map((asset, index) => {
+    const mappedAssets = personalAssets.map((asset, index) => {
         return <AssetCard asset={asset} key={'asset' + index} />
     })
 
@@ -65,7 +39,7 @@ export default function Safe() {
                 </p>
                 <div className='safe__container'>
                     {mappedAssets}
-                    {assets.length < 8 ? AddAsset() : ''}
+                    {personalAssets.length < 8 ? AddAsset() : ''}
                 </div>
             </motion.div>
         </>

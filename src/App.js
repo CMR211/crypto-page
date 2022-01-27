@@ -1,10 +1,16 @@
 import React from 'react'
+import axios from 'axios'
 
 import ContentWrapper from './Components/ContentWrapper.js'
 import ContextProvider from './Components/ContextProvider.js'
+
+import getNYSETickers from './Functions/NYSETickers.js'
+
 import './main.css'
 
-import axios from 'axios'
+const NYSE_STOCKS = []
+const NYSETickers = getNYSETickers()
+NYSETickers.forEach((el) => NYSE_STOCKS.push(el.name))
 
 function isStorageAvailable(type) {
     // checking if there is a storage available
@@ -82,9 +88,10 @@ async function fetchPopularStocks(callbackFn) {
 }
 
 async function fetchPopularCryptos(callbackFn) {
+    const coins =
+        'bitcoin,ethereum,cardano,ripple,binancecoin,solana,polkadot,dogecoin'
     const popularCryptosFetchOptions = {
-        coins: 'bitcoin,ethereum,cardano,ripple,binancecoin,solana,polkadot,dogecoin',
-        url: `https://api.coingecko.com/api/v3/simple/price?ids=${popularCryptosFetchOptions.coins}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`,
+        url: `https://api.coingecko.com/api/v3/simple/price?ids=${coins}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`,
         headers: {
             'Access-Control-Allow-Origin': '*',
             Accept: 'json/text',
@@ -164,89 +171,29 @@ function App() {
         fetchPopularCryptos(setPopularCryptos)
     }, [])
 
-    // Fetching cryptos and stocks list of available assets
-    const [cryptoList, setCryptoList] = React.useState()
+    // Fetching lists of available cryptos and stocks to choose from
+    const [cryptosList, setCryptosList] = React.useState()
     const [stocksList, setStocksList] = React.useState()
     React.useEffect(() => {
-        // fetchPopularStocks(setPopularStocks)
-        fetchCryptoList(setCryptoList)
+        fetchCryptoList(setCryptosList)
+        setStocksList(NYSE_STOCKS)
     }, [])
 
-    const [personalCrypto, setPersonalCrypto] = React.useState()
+    // Get personal assets form localStorage on app load
     const [personalAssets, setPersonalAssets] = React.useState(null)
-
-    // ---------------------------------------------------
-    // Get personal coins list form localstorage
     React.useEffect(() => {
+        // check if localstorage is available
         if (!isStorageAvailable('localStorage')) return
-        const array = []
-        for (let i = 0; i < localStorage.length; i++) {
-            const obj = JSON.parse(localStorage.getItem(localStorage.key(i)))
-            array.push(obj)
-        }
-        console.log(localStorage)
-        setPersonalAssets(localStorage)
-        console.log('--------------------')
-        console.log('Personal assets:')
-        console.log(personalAssets)
-        console.log('--------------------')
+        // set personalAssets from localStorage
+        setPersonalAssets(JSON.parse(localStorage.getItem('assets')))
     }, [])
-    // ---------------------------------------------------
 
-    // ---------------------------------------------------
-    // fetch options for cryptocurrency API call
-
-    // ---------------------------------------------------
-
-    // Fetching popular cryptocurrency
+    // Update localStorage whenever personalAssets change
     React.useEffect(() => {
-        // fetch cryptocurrency data (function declaration)
-        //todo: stock data: financialmodelingprep ... fmp
-    }, [])
-    // ---------------------------------------------------
+        localStorage.setItem('assets', JSON.stringify(personalAssets))
+    }, [personalAssets])
 
-    // ---------------------------------------------------
-    // fetch personal coins
-    React.useEffect(() => {
-        // fetch cryptocurrency data (function declaration)
-        async function fetchPersonalCrypto(coins) {
-            try {
-                const query = coins.filter((item) => item.type === 'crypto')
-                const response = await fetch(
-                    `https://api.coingecko.com/api/v3/simple/price?ids=${coins}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`,
-                    fetchOptionsCrypto.headers
-                )
-                const json = await response.json()
-                // 0: [array]
-                // id: "01coin"
-                // name: "01coin"
-                // symbol: "zoc"
-                setTimeout(() => {
-                    setPersonalCrypto(json)
-                    console.log('personal crypto data')
-                    console.log(personalCrypto)
-                }, 1000)
-            } catch (e) {
-                console.log('Fetching Personal Crypto Data failed.', e)
-            }
-        }
-
-        // fetch cryptocurrency coins list (function invoke)
-        console.log('personalCryptoList:')
-        console.log(personalAssets.join(','))
-        fetchPersonalCrypto(personalAssets.join(','))
-    }, [personalAssets]) // to fetch just once
-
-    // i can add new global state in the context which will be -1 or +1 and a button to change the state,
-    // then it is possible to add a listener here in useEffect so that i can have refresh button
-
-    // todo: ad locale button (is it necessary though?)
-    // const [locale, setLocale] = React.useState('en')
-    // function toggleLocale () {
-    //   if (locale === 'en') {setLocale('pl')} else {setLocale('en')}
-    // }
-
-    // current page global state
+    // Current page global state
     const [page, setPage] = React.useState('landing-page')
 
     // useMemo to store all the global variables
@@ -254,16 +201,24 @@ function App() {
         () => ({
             page,
             setPage,
-            popularCryptoData,
-            cryptoList,
-            setPersonalAssets,
+            popularCryptos,
+            popularStocks,
+            cryptosList,
+            stocksList,
             personalAssets,
-            personalCrypto,
-            popularStockData,
+            setPersonalAssets,
         }),
-        [page, personalAssets]
+        [personalAssets, page]
     )
 
+    setTimeout(() => {
+        console.log('Popular Cryptos:')
+        console.log(popularCryptos)
+        console.log('Popular Stocks:')
+        console.log(popularStocks)
+    }, 1000)
+
+    // Render
     return (
         <ContextProvider.Provider value={value}>
             <ContentWrapper />

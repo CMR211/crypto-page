@@ -1,3 +1,7 @@
+export default function getNYSETickers() {
+    return NYSETickers
+}
+
 const NYSETickers = [
     {
         symbol: `A`,

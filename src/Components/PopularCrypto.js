@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'
 
 export default function PopularCrypto() {
-    const { popularCryptoData } = React.useContext(ContextProvider)
+    const { popularCryptos } = React.useContext(ContextProvider)
 
     return (
         <motion.div
@@ -17,7 +17,7 @@ export default function PopularCrypto() {
             <h1>Most popular cryptos</h1>
 
             <div className='popular__container'>
-                {Object.keys(popularCryptoData)
+                {Object.keys(popularCryptos)
                     .sort()
                     .map((key, index) => {
                         return (

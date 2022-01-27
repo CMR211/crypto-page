@@ -2,8 +2,7 @@ import React from 'react'
 import ContextProvider from './ContextProvider'
 
 export default function AssetCard({ asset }) {
-    const { personalCrypto } = React.useContext(ContextProvider)
-    console.log(personalCrypto)
+    // const { personalAssets, setPersonalAssets } = React.useContext(ContextProvider)
 
     const { name, type, symbol, prices } = asset
 
@@ -16,7 +15,7 @@ export default function AssetCard({ asset }) {
                 100
         ) / 100
 
-    const currentPrice = personalCrypto[name].usd
+    const currentPrice = 1234.56
 
     const profit =
         Math.round(totalVolume * (currentPrice - avgPrice) * 100) / 100

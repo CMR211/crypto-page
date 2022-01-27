@@ -3,8 +3,8 @@ import ContextProvider from './ContextProvider'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'
 
-const regNumber = /(\d|\.|\,){1,}/
-const regValidNumber = /^-?(0|[1-9]\d*)((\.|\,)\d+)?$/
+const regNumber = /(\d|\.|,){1,}/
+const regValidNumber = /^-?(0|[1-9]\d*)((\.|,)\d+)?$/
 
 export default function AddAssetModal() {
     // React Refs to get input field values when submitting
@@ -15,7 +15,7 @@ export default function AddAssetModal() {
     const inputTypeS = React.useRef(null)
 
     // Crypto coin list
-    const { cryptoList, setPage } = React.useContext(ContextProvider)
+    const { cryptosList, stocksList, setPage, personalAssets, setPersonalAssets } = React.useContext(ContextProvider)
     // it looks like that:
     // 0: [array]
     // id: "01coin"
@@ -30,8 +30,6 @@ export default function AddAssetModal() {
     const [isError3visible, setIsError3visible] = React.useState('none')
 
     function submitForm(e) {
-        // preventing default action (reloading page)
-        // e.preventDefault()
         // pattern matching to ensure proper data
         if (name === undefined) {
             setIsError1visible('block')
@@ -56,10 +54,11 @@ export default function AddAssetModal() {
         }
 
         // Here I am creating new object from the inputs
+        const assettype = inputTypeC.current.checked === true ? 'crypto' : 'stock'
         const asset = {
             name: inputName.current.value,
-            type: inputTypeC.current.checked === true ? 'crypto' : 'stock',
-            symbol: getSymbol(inputName.current.value),
+            type: assettype,
+            symbol: getSymbol(assettype, inputName.current.value),
             prices: [
                 {
                     price: inputPrice.current.value,
@@ -67,9 +66,8 @@ export default function AddAssetModal() {
                 },
             ],
         }
-        // Saving it to local storage
-        const prevStorage = localStorage.getItem('coins')
-        localStorage.setItem('coins', )
+        // Store new asset in react state with prev assets
+        setPersonalAssets([...personalAssets, asset])
         // Now I need to clear all the inputs
         inputName.current.value = ''
         inputVolume.current.value = ''
@@ -78,34 +76,22 @@ export default function AddAssetModal() {
         setPage('safe')
     }
 
-    function saveToLS(object) {
-        // first lets check if there is an item with this key in storage
-        // the keys are assigned by crypto name
-        if (localStorage[object.name] === undefined) {
-            // if there is no such item I create it (it needs to be a string first)
-            localStorage.setItem(object.name, JSON.stringify(object))
-        } else {
-            // if there is such an item, user probably wanted to add another transaction
-            // so I am getting the existing object:
-            const prevObject = JSON.parse(localStorage.getItem(object.name))
-            // and then I am creating a new object using spread operators that contains
-            // existing informations and a new price-volume pair (another transaction)
-            const newObject = {
-                ...prevObject,
-                prices: [...prevObject.prices, object.prices[0]],
-            }
-            // lastly I am saving this new object to local storage
-            localStorage.setItem(object.name, JSON.stringify(newObject))
+    function getSymbol(type, name) {
+        if (type === 'crypto') {
+            // I am filtering whole crypto list to create an array with a proper name
+            const obj = cryptosList.filter((item) => {
+                return name === item.name
+            })
+            // returning its symbol
+            return obj[0].symbol
         }
-    }
-
-    function getSymbol(name) {
-        // I am filtering whole crypto list to create an array with a proper name
-        const obj = cryptoList.filter((item) => {
-            return name === item.name
-        })
-        // returning its symbol
-        return obj[0].symbol
+        if (type === 'stock') {
+            const obj = stocksList.filter((item) => {
+                return name === item.name
+            })
+            // returning its symbol
+            return obj[0].symbol
+        }
     }
 
     function getValidCharacters(input) {
@@ -172,7 +158,7 @@ export default function AddAssetModal() {
                         onChange={(e) => setName(e.target.value)}
                     />
                     <datalist id='cryptoList'>
-                        {cryptoList.map((item) => {
+                        {cryptosList.map((item) => {
                             return <option value={item.name} />
                         })}
                     </datalist>
