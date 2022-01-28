@@ -20,7 +20,7 @@ export default function ContentWrapper() {
                 {page === 'safe' && <Safe key={4} />}
                 {page === 'add' && <AddAssetModal key={5} />}
             </AnimatePresence>
-            <Navbar key={5} />
+            <Navbar key={6} />
         </>
     )
 }

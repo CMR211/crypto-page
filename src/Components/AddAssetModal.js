@@ -15,7 +15,13 @@ export default function AddAssetModal() {
     const inputTypeS = React.useRef(null)
 
     // Crypto coin list
-    const { cryptosList, stocksList, setPage, personalAssets, setPersonalAssets } = React.useContext(ContextProvider)
+    const {
+        cryptosList,
+        stocksList,
+        setPage,
+        personalAssets,
+        setPersonalAssets,
+    } = React.useContext(ContextProvider)
     // it looks like that:
     // 0: [array]
     // id: "01coin"
@@ -54,7 +60,8 @@ export default function AddAssetModal() {
         }
 
         // Here I am creating new object from the inputs
-        const assettype = inputTypeC.current.checked === true ? 'crypto' : 'stock'
+        const assettype =
+            inputTypeC.current.checked === true ? 'crypto' : 'stock'
         const asset = {
             name: inputName.current.value,
             type: assettype,
@@ -67,13 +74,17 @@ export default function AddAssetModal() {
             ],
         }
         // Store new asset in react state with prev assets
-        setPersonalAssets([...personalAssets, asset])
+        if (personalAssets === undefined) {
+            setPersonalAssets([asset])
+        } else {
+            setPersonalAssets([...personalAssets, asset])
+        }
         // Now I need to clear all the inputs
         inputName.current.value = ''
         inputVolume.current.value = ''
         inputPrice.current.value = ''
         // And returning to 'safe' page
-        setPage('safe')
+        setTimeout(() => setPage('safe'), 5500)
     }
 
     function getSymbol(type, name) {
@@ -221,9 +232,9 @@ export default function AddAssetModal() {
                     </p>
                 </div>
             </form>
-            <button
-                onClick={() => submitForm()}
-                className='form__submit'>Submit</button>
+            <button onClick={() => submitForm()} className='form__submit'>
+                Submit
+            </button>
         </motion.div>
     )
 }

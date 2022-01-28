@@ -5,11 +5,15 @@ import { pageAnimation } from '../Functions/framerVariants'
 import { motion } from 'framer-motion'
 
 export default function Safe() {
-    const { setPage, personalAssets } = React.useContext(ContextProvider)
+    const { personalAssets, setPage } = React.useContext(ContextProvider)
 
-    const mappedAssets = personalAssets.map((asset, index) => {
-        return <AssetCard asset={asset} key={'asset' + index} />
-    })
+    function getPersonalAssets() {
+        if (personalAssets === undefined) return
+        const mappedAssets = personalAssets.map((asset, index) => {
+            return <AssetCard asset={asset} key={'asset' + index} />
+        })
+        return mappedAssets
+    }
 
     function AddAsset() {
         return (
@@ -38,8 +42,8 @@ export default function Safe() {
                     profit or loss. You can have up to 8 assets saved.
                 </p>
                 <div className='safe__container'>
-                    {mappedAssets}
-                    {personalAssets.length < 8 ? AddAsset() : ''}
+                    {getPersonalAssets()}
+                    {(personalAssets === undefined || personalAssets.length < 8) ? AddAsset() : ''}
                 </div>
             </motion.div>
         </>

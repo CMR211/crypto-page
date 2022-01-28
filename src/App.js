@@ -154,11 +154,33 @@ async function fetchStocks(stocks, callbackFn) {
     axios
         .request(options)
         .then(function (response) {
-            console.log(response.data)
+            callbackFn(response)
         })
         .catch(function (error) {
             console.error(error)
         })
+}
+
+async function fetchCryptos(cryptos, callbackFn) {
+    const coins = cryptos.join(',')
+    const cryptosFetchOptions = {
+        url: `https://api.coingecko.com/api/v3/simple/price?ids=${coins}&vs_currencies=usd&include_market_cap=true&include_24hr_change=true`,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'json/text',
+            'Content-type': 'json/text',
+        },
+    }
+    try {
+        const response = await fetch(
+            cryptosFetchOptions.url,
+            cryptosFetchOptions.headers
+        )
+        const json = await response.json()
+        setTimeout(() => callbackFn(json), 500)
+    } catch (e) {
+        console.error('Fetching Popular Cryptos failed.', e)
+    }
 }
 
 // -----------------------------------------------------------
@@ -180,17 +202,45 @@ function App() {
     }, [])
 
     // Get personal assets form localStorage on app load
-    const [personalAssets, setPersonalAssets] = React.useState(null)
+    const [personalAssets, setPersonalAssets] = React.useState()
     React.useEffect(() => {
         // check if localstorage is available
         if (!isStorageAvailable('localStorage')) return
         // set personalAssets from localStorage
-        setPersonalAssets(JSON.parse(localStorage.getItem('assets')))
+        try {
+            setPersonalAssets(JSON.parse(localStorage.getItem('assets')))
+        } catch(e) {
+            console.error(e)
+        }
     }, [])
 
-    // Update localStorage whenever personalAssets change
-    React.useEffect(() => {
+    // Fetching personal assets current prices
+    const [personalStocksPrices, setPersonalStocksPrices] = React.useState()
+    const [personalCryptosPrices, setPersonalCryptosPrices] = React.useState()
+    React.useState(() => {
+        // Update localStorage whenever personalAssets change
+        console.log('Update localStorage whenever personalAssets change')
         localStorage.setItem('assets', JSON.stringify(personalAssets))
+        // Fetching personal assets current prices
+        console.log('Fetching personal assets current prices')
+        if (personalAssets === undefined) return
+        const personalStocks = []
+        const personalCryptos = []
+        console.table(personalAssets)
+        personalAssets.forEach((item) => {
+            if (item.type === 'stock') personalStocks.push(item.name)
+            if (item.type === 'crypto') personalCryptos.push(item.name)
+        })
+        console.log('personalStocks:')
+        console.log(personalStocks)
+        console.log('personalCryptos:')
+        console.log(personalCryptos)
+        if (personalStocks.length > 0) {
+            fetchStocks(personalStocks, setPersonalStocksPrices)
+        }
+        if (personalCryptos.length > 0) {
+            fetchCryptos(personalCryptos, setPersonalCryptosPrices)
+        }
     }, [personalAssets])
 
     // Current page global state
@@ -207,16 +257,11 @@ function App() {
             stocksList,
             personalAssets,
             setPersonalAssets,
+            personalStocksPrices,
+            personalCryptosPrices,
         }),
-        [personalAssets, page]
+        [personalAssets, personalStocksPrices, personalCryptosPrices, page]
     )
-
-    setTimeout(() => {
-        console.log('Popular Cryptos:')
-        console.log(popularCryptos)
-        console.log('Popular Stocks:')
-        console.log(popularStocks)
-    }, 1000)
 
     // Render
     return (

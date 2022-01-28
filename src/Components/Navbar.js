@@ -13,16 +13,22 @@ export default function Navbar() {
     const { setPage } = React.useContext(ContextProvider)
 
     return (
-        <motion.div className={`nav`} >
+        <motion.div className={`nav`} key='adszxc'>
             {navbarItems.map((item, index) => {
                 return (
                     <>
                         <button
                             key={`navbarItems-${index}`}
                             className={`nav__item nav__item${index + 1}=`}
-                            onClick={() => {setPage(item[2]); }}>
-                            <i className={item[1]}></i>
-                            <span className='nav__item__text'>{`${item[0]}`}</span>
+                            onClick={() => {
+                                setPage(item[2])
+                            }}>
+                            <i
+                                key={`navbarItemsI-${index}`}
+                                className={item[1]}></i>
+                            <span
+                                key={`navbarItemsSpan-${index}`}
+                                className='nav__item__text'>{`${item[0]}`}</span>
                         </button>
                     </>
                 )

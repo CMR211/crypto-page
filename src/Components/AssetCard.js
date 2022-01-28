@@ -2,7 +2,8 @@ import React from 'react'
 import ContextProvider from './ContextProvider'
 
 export default function AssetCard({ asset }) {
-    // const { personalAssets, setPersonalAssets } = React.useContext(ContextProvider)
+    const { personalStocksPrices, personalCryptosPrices } =
+        React.useContext(ContextProvider)
 
     const { name, type, symbol, prices } = asset
 
@@ -15,10 +16,25 @@ export default function AssetCard({ asset }) {
                 100
         ) / 100
 
-    const currentPrice = 1234.56
+    function getCurrentPrice() {
+        return 2000
+        // console.table(personalCryptosPrices)
+        if (type === 'crypto') {
+            const t = personalCryptosPrices.filter(
+                (item) => item.name === name
+            )[0].usd
+            return t
+        }
+        if (type === 'stock') {
+            const t = personalStocksPrices.filter(
+                (item) => item.name === name
+            )[0].usd
+            return t
+        }
+    }
 
     const profit =
-        Math.round(totalVolume * (currentPrice - avgPrice) * 100) / 100
+        Math.round(totalVolume * (getCurrentPrice() - avgPrice) * 100) / 100
 
     // when clicking on a coin container I want to see detailed info, so it redirects to coinmarketcap
     function gotoLink() {
@@ -48,7 +64,7 @@ export default function AssetCard({ asset }) {
                         {`${totalVolume.toLocaleString()} ${symbol.toUpperCase()} @ ${avgPrice.toLocaleString()}`}
                     </span>
                     <span className='asset__prices__avg-price'>
-                        {personalCrypto[name].usd.toLocaleString()}
+                        {/* {personal[name].usd.toLocaleString()} */}asd
                     </span>
                     <span className='asset__prices__usd'>USD</span>
                 </p>
@@ -56,7 +72,7 @@ export default function AssetCard({ asset }) {
                 <p className='asset__prices asset__current'>
                     <span className='asset__prices__text'>Current price: </span>
                     <span className='asset__prices__avg-price'>
-                        {currentPrice.toLocaleString()}
+                        {getCurrentPrice().toLocaleString()}
                     </span>
                     <span className='asset__prices__usd'>USD</span>
                 </p>
