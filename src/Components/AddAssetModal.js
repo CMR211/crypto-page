@@ -1,5 +1,5 @@
 import React from 'react'
-import ContextProvider from './ContextProvider'
+import { PopularCryptosAndStocksProvider, PageProvider, PersonalAssetsProvider}  from './ContextProvider'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'
 
@@ -15,18 +15,15 @@ export default function AddAssetModal() {
     const inputTypeS = React.useRef(null)
 
     // Crypto coin list
-    const {
-        cryptosList,
-        stocksList,
-        setPage,
-        personalAssets,
-        setPersonalAssets,
-    } = React.useContext(ContextProvider)
+    const { cryptosList, stocksList } = React.useContext(PopularCryptosAndStocksProvider)
     // it looks like that:
     // 0: [array]
     // id: "01coin"
     // name: "01coin"
     // symbol: "zoc"
+
+    const { page, setPage } = React.useContext(PageProvider)
+    const { personalAssets, setPersonalAssets } = React.useContext(PersonalAssetsProvider)
 
     const [name, setName] = React.useState()
     const [price, setPrice] = React.useState()
@@ -63,28 +60,32 @@ export default function AddAssetModal() {
         const assettype =
             inputTypeC.current.checked === true ? 'crypto' : 'stock'
         const asset = {
-            name: inputName.current.value,
+            name: name,
             type: assettype,
-            symbol: getSymbol(assettype, inputName.current.value),
+            symbol: getSymbol(assettype, name),
             prices: [
                 {
-                    price: inputPrice.current.value,
-                    volume: inputVolume.current.value,
+                    price: price,
+                    volume: volume,
                 },
             ],
         }
+        console.log(asset)
         // Store new asset in react state with prev assets
         if (personalAssets === undefined) {
             setPersonalAssets([asset])
         } else {
-            setPersonalAssets([...personalAssets, asset])
+            console.log('setting personalassets')
+            setPersonalAssets(personalAssets => [...personalAssets, asset])
         }
+        console.log(personalAssets)
+        localStorage.setItem('assets', JSON.stringify(personalAssets))
         // Now I need to clear all the inputs
         inputName.current.value = ''
         inputVolume.current.value = ''
         inputPrice.current.value = ''
         // And returning to 'safe' page
-        setTimeout(() => setPage('safe'), 5500)
+        setTimeout(() => setPage('safe'), 350)
     }
 
     function getSymbol(type, name) {
@@ -166,6 +167,7 @@ export default function AddAssetModal() {
                         type='list'
                         ref={inputName}
                         required
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                     <datalist id='cryptoList'>

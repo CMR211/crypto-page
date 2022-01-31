@@ -64,7 +64,7 @@
     }
     &__circle {
         $size: 100px;
-        background: $color-accent-1b;
+        background: var(--color);
         width: $size;
         height: $size;
         font-size: calc($size / 3);

@@ -1,5 +1,5 @@
 import React from 'react'
-import ContextProvider from './ContextProvider'
+import { PageProvider } from './ContextProvider'
 import { motion } from 'framer-motion'
 
 const navbarItems = [
@@ -10,7 +10,7 @@ const navbarItems = [
 ]
 
 export default function Navbar() {
-    const { setPage } = React.useContext(ContextProvider)
+    const { setPage } = React.useContext(PageProvider)
 
     return (
         <motion.div className={`nav`} key='adszxc'>

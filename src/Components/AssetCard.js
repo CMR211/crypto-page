@@ -1,13 +1,13 @@
 import React from 'react'
-import ContextProvider from './ContextProvider'
+import {PersonalAssetsProvider} from './ContextProvider'
 
-export default function AssetCard({ asset }) {
-    const { personalStocksPrices, personalCryptosPrices } =
-        React.useContext(ContextProvider)
+export default function AssetCard({ asset, index }) {
+    const { personalStocks, personalCryptos } =
+        React.useContext(PersonalAssetsProvider)
 
     const { name, type, symbol, prices } = asset
 
-    const totalVolume = prices.reduce((prev, curr) => prev + curr.volume, 0)
+    const totalVolume = prices.reduce((prev, curr) => prev + parseFloat(curr.volume), 0)
 
     const avgPrice =
         Math.round(
@@ -20,13 +20,13 @@ export default function AssetCard({ asset }) {
         return 2000
         // console.table(personalCryptosPrices)
         if (type === 'crypto') {
-            const t = personalCryptosPrices.filter(
+            const t = personalCryptos.filter(
                 (item) => item.name === name
             )[0].usd
             return t
         }
         if (type === 'stock') {
-            const t = personalStocksPrices.filter(
+            const t = personalStocks.filter(
                 (item) => item.name === name
             )[0].usd
             return t
@@ -50,11 +50,16 @@ export default function AssetCard({ asset }) {
         if (profit > 0) return 'text-green'
     }
 
+    function getRandomColor() {
+        return 'hsl(' + 360/8*index + 'deg 100% 79%)'
+    }
+
     return (
         <a className='popular-card__link' href={gotoLink()}>
             <div
                 className={`asset`}
-                onClick={(event) => (window.location.href = gotoLink())}>
+                onClick={(event) => (window.location.href = gotoLink())}
+                style={{'--color': getRandomColor() }}>
                 <div className='asset__circle'>{symbol.toUpperCase()}</div>
 
                 <p className='asset__title'>{name.toUpperCase()}</p>
@@ -64,7 +69,7 @@ export default function AssetCard({ asset }) {
                         {`${totalVolume.toLocaleString()} ${symbol.toUpperCase()} @ ${avgPrice.toLocaleString()}`}
                     </span>
                     <span className='asset__prices__avg-price'>
-                        {/* {personal[name].usd.toLocaleString()} */}asd
+                        {/* {personal[name].usd.toLocaleString()} */}
                     </span>
                     <span className='asset__prices__usd'>USD</span>
                 </p>
@@ -88,6 +93,18 @@ export default function AssetCard({ asset }) {
                     <span className={`asset__prices__usd ${getChangeColor()}`}>
                         USD
                     </span>
+                    <br />
+                    <span className={`asset__prices__text ${getChangeColor()}`}>
+                        {profit < 0 ? '' : '+'}
+                    </span>
+                    <span
+                        className={`asset__prices__avg-price ${getChangeColor()}`}>
+                        {Math.round((getCurrentPrice() - avgPrice)/avgPrice*100)}
+                    </span>
+                    <span className={`asset__prices__usd ${getChangeColor()}`}>
+                        %
+                    </span>
+
                 </p>
             </div>
         </a>

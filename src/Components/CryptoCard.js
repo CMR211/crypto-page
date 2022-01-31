@@ -1,13 +1,10 @@
 import React from 'react'
-import ContextProvider from './ContextProvider'
+import {PopularCryptosAndStocksProvider} from './ContextProvider.js'
 
-export default function CryptoCard( {token} ) {
-
-  // destructuring Context object since I only need cryptoData in this component
-  const { popularCryptos } = React.useContext(ContextProvider)
+export default function CryptoCard( {cryptoName, popularCryptos} ) {
 
   // round daily change to #.## format
-  const change24 = Math.round(popularCryptos[token].usd_24h_change * 100) / 100
+  const change24 = Math.round(popularCryptos[cryptoName].usd_24h_change * 100) / 100
 
   // when daily change is negative its color is red, otherwise green
   function getChangeColor() {
@@ -18,21 +15,21 @@ export default function CryptoCard( {token} ) {
   // when clicking on a coin container I want to see detailed info, so it redirects to coinmarketcap
   function gotoLink() {
     const url = 'https://coinmarketcap.com/currencies/'
-    if (token === 'binancecoin') return url + 'bnb'
-    if (token === 'polkadot') return url + 'polkadot-new'
-    return url + token
+    if (cryptoName === 'binancecoin') return url + 'bnb'
+    if (cryptoName === 'polkadot') return url + 'polkadot-new'
+    return url + cryptoName
   }
 
   return (
     <a className='popular-card__link' href={gotoLink()}>
-      <div className={`popular-card popular-card-${token}`} onClick={event => window.location.href = gotoLink()}>
+      <div className={`popular-card popular-card-${cryptoName}`} onClick={event => window.location.href = gotoLink()}>
 
-        <img className='popular-card__icon' src={`/assets/${token}.png`} alt={`${token}-icon`} />
+        <img className='popular-card__icon' src={`/assets/${cryptoName}.png`} alt={`${cryptoName}-icon`} />
 
-        <p className='popular-card__title'>{token.toUpperCase()}</p>
+        <p className='popular-card__title'>{cryptoName.toUpperCase()}</p>
 
         <p className='popular-card__price'>
-          {popularCryptos[token].usd.toLocaleString()}
+          {popularCryptos[cryptoName].usd.toLocaleString()}
           <span className='popular-card__price__usd'>USD</span>
         </p>
 

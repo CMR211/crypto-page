@@ -1,11 +1,11 @@
 import React from 'react'
-import ContextProvider from './ContextProvider'
+import { PopularCryptosAndStocksProvider } from './ContextProvider'
 import StockCard from './StockCard'
 import { motion } from 'framer-motion'
-import {pageAnimation} from '../Functions/framerVariants'
+import { pageAnimation } from '../Functions/framerVariants'
 
 export default function PopularStock() {
-    const { popularStocks } = React.useContext(ContextProvider)
+    const { popularStocks } = React.useContext(PopularCryptosAndStocksProvider)
     // format:
     // change: -1.0347117
     // name: "Apple Inc."
