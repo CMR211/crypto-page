@@ -1,7 +1,13 @@
 import axios from 'axios'
 
-export default async function fetchPopularStocks(callbackFn) {
-    // callback: setPopularStocks(stocks)
+export default async function fetchPopularStocks(setterFn, loadingFn) {
+    // this function fetches popular stocks
+    // it takes 2 functions as arguments:
+    // - setterFn is the react set function from React.useState()
+    //   that you are using to set fetched data to react state
+    // - loadingFn is react set state function representing loading state in a component
+
+    loadingFn(true)
     const popularStocksFetchOptions = {
         method: 'GET',
         url: 'https://stock-data-yahoo-finance-alternative.p.rapidapi.com/v6/finance/quote',
@@ -14,27 +20,28 @@ export default async function fetchPopularStocks(callbackFn) {
             'Access-Control-Allow-Origin': '*',
         },
     }
+
     try {
         const response = await axios.request(popularStocksFetchOptions)
-        setTimeout(() => {
-            const array = response.data.quoteResponse.result
-            const stocks = []
-            array.forEach((item) => {
-                const stock = {
-                    symbol: item.symbol,
-                    name: item.shortName,
-                    price: item.regularMarketOpen,
-                    change: item.regularMarketChangePercent,
-                }
-                stocks.push(stock)
-            })
-            callbackFn(stocks)
-            // format:
-            // change: -1.0347117
-            // name: "Apple Inc."
-            // price: 166.98
-            // symbol: "AAPL"
-        }, 500)
+        const array = response.data.quoteResponse.result
+        const stocks = []
+        array.forEach((item) => {
+            const stock = {
+                symbol: item.symbol,
+                name: item.shortName,
+                price: item.regularMarketOpen,
+                change: item.regularMarketChangePercent,
+            }
+            stocks.push(stock)
+        })
+        setterFn(stocks)
+        console.log(stocks)
+        // format:
+        // change: -1.0347117
+        // name: "Apple Inc."
+        // price: 166.98
+        // symbol: "AAPL"
+        loadingFn(false)
     } catch (e) {
         console.error('Fetching Popular Stocks failed.', e)
     }

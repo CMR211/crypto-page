@@ -1,12 +1,12 @@
 import React from 'react'
-import { PopularCryptosAndStocksProvider, PageProvider, PersonalAssetsProvider}  from './ContextProvider'
+import { CryptosAndStocksListProvider, PageProvider, PersonalAssetsProvider}  from './ContextProvider'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'
 
 const regNumber = /(\d|\.|,){1,}/
 const regValidNumber = /^-?(0|[1-9]\d*)((\.|,)\d+)?$/
 
-export default function AddAssetModal() {
+export default function AddAssetModal({allCryptosList, allStocksList, personalAssets, setPersonalAssets, syncLS}) {
     // React Refs to get input field values when submitting
     const inputName = React.useRef(null)
     const inputVolume = React.useRef(null)
@@ -14,16 +14,7 @@ export default function AddAssetModal() {
     const inputTypeC = React.useRef(null)
     const inputTypeS = React.useRef(null)
 
-    // Crypto coin list
-    const { cryptosList, stocksList } = React.useContext(PopularCryptosAndStocksProvider)
-    // it looks like that:
-    // 0: [array]
-    // id: "01coin"
-    // name: "01coin"
-    // symbol: "zoc"
-
     const { page, setPage } = React.useContext(PageProvider)
-    const { personalAssets, setPersonalAssets } = React.useContext(PersonalAssetsProvider)
 
     const [name, setName] = React.useState()
     const [price, setPrice] = React.useState()
@@ -70,16 +61,13 @@ export default function AddAssetModal() {
                 },
             ],
         }
-        console.log(asset)
         // Store new asset in react state with prev assets
-        if (personalAssets === undefined) {
+        if (!personalAssets) {
             setPersonalAssets([asset])
         } else {
-            console.log('setting personalassets')
             setPersonalAssets(personalAssets => [...personalAssets, asset])
         }
-        console.log(personalAssets)
-        localStorage.setItem('assets', JSON.stringify(personalAssets))
+        syncLS(personalAssets)
         // Now I need to clear all the inputs
         inputName.current.value = ''
         inputVolume.current.value = ''
@@ -91,14 +79,14 @@ export default function AddAssetModal() {
     function getSymbol(type, name) {
         if (type === 'crypto') {
             // I am filtering whole crypto list to create an array with a proper name
-            const obj = cryptosList.filter((item) => {
+            const obj = allCryptosList.filter((item) => {
                 return name === item.name
             })
             // returning its symbol
             return obj[0].symbol
         }
         if (type === 'stock') {
-            const obj = stocksList.filter((item) => {
+            const obj = allStocksList.filter((item) => {
                 return name === item.name
             })
             // returning its symbol
@@ -171,7 +159,7 @@ export default function AddAssetModal() {
                         onChange={(e) => setName(e.target.value)}
                     />
                     <datalist id='cryptoList'>
-                        {cryptosList.map((item) => {
+                        {allCryptosList.map((item) => {
                             return <option value={item.name} />
                         })}
                     </datalist>

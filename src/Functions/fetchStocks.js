@@ -6,7 +6,8 @@ export default function fetchStocks(stocks, callbackFn) {
         params: {
             interval: '5min',
             function: 'GLOBAL_QUOTE',
-            symbol: stocks.join(','),
+            symbol: 'GME',
+            // symbol: stocks.join(','),
             datatype: 'json',
             output_size: 'compact',
         },

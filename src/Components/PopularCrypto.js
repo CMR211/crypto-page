@@ -10,16 +10,12 @@ export default function PopularCrypto() {
     const [popularCryptos, setPopularCryptos] = React.useState()
     const [isLoading, setLoading] = React.useState(true)
     React.useEffect(() => {
-        fetchPopularCryptos(setPopularCryptos)
-        setTimeout(() => {
-            setLoading(false)
-            console.log(popularCryptos)
-        }, 1000)
+        fetchPopularCryptos(setPopularCryptos, setLoading)
     }, [])
 
     function LoadingComponent() {
         return (
-            <div className='loadingComponent'>
+            <div className='loadingComponent page'>
                 <h2>Popular cryptos are being loaded...</h2>
             </div>
         )

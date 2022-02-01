@@ -1,5 +1,4 @@
 import React from 'react'
-import ContextProvider from './ContextProvider'
 
 export default function StockCard({ stock }) {
     const { name, price, change, symbol } = stock

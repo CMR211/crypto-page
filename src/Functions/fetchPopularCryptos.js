@@ -1,4 +1,5 @@
-export default async function fetchPopularCryptos(callbackFn) {
+export default async function fetchPopularCryptos(setterFn, loadingFn) {
+    loadingFn(true)
     const coins =
         'bitcoin,ethereum,cardano,ripple,binancecoin,solana,polkadot,dogecoin'
     const popularCryptosFetchOptions = {
@@ -15,7 +16,8 @@ export default async function fetchPopularCryptos(callbackFn) {
             popularCryptosFetchOptions.headers
         )
         const json = await response.json()
-        setTimeout(() => callbackFn(json), 500)
+        setterFn(json)
+        loadingFn(false)
     } catch (e) {
         console.error('Fetching Popular Cryptos failed.', e)
     }
