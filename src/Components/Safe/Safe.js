@@ -1,12 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { pageAnimation } from '../Functions/framerVariants'
+import { pageAnimation } from '../../Functions/framerVariants'
 import AssetCard from './AssetCard'
 import { v4 as uuidv4 } from 'uuid'
 
-
 export default function Safe({ personalAssets, setPage, syncLS }) {
-
     function AddAsset() {
         return (
             <button

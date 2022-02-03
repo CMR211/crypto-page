@@ -4,7 +4,9 @@ import './main.css'
 
 // -----------------------------------------------------------
 function App() {
-    console.log('Rendering App')
+    const time = new Date
+    const timeNow = time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds()
+    console.log('%c[R] Rendering App: ' + timeNow, 'color: gray')
 
     // Render
     return (

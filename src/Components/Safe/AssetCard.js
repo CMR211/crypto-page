@@ -1,5 +1,5 @@
 import React from 'react'
-import {PersonalAssetsProvider} from './ContextProvider'
+import {PersonalAssetsProvider} from '../ContextProvider'
 
 export default function AssetCard({ asset, index }) {
     const { personalStocks, personalCryptos } =

@@ -1,4 +1,5 @@
-export default async function fetchCryptoList(callbackFn) {
+export default async function fetchCryptoList(setterFn, loadingFn) {
+    loadingFn(true)
     const cryptoListFetchOptions = {
         url: 'https://api.coingecko.com/api/v3/coins/list',
         headers: {
@@ -13,10 +14,13 @@ export default async function fetchCryptoList(callbackFn) {
             cryptoListFetchOptions.headers
         )
         const json = await response.json()
-        setTimeout(() => {
-            callbackFn(json)
-        }, 1000) // set to 1s since the list is huge
+        setterFn(json)
+        loadingFn(false)
+        console.log('%cFetching Coins List succedded.', 'color:green; font-weight:bold')
+        console.table(json)
     } catch (e) {
-        console.error('Fetching Coins List failed.', e)
+        console.error('%c Fetching Coins List failed.', 'color:red; font-weight:bold', e)
+        loadingFn('error')
+        return(e)
     }
 }
