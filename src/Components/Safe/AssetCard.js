@@ -1,7 +1,9 @@
 import React from 'react'
 import {PersonalAssetsProvider} from '../ContextProvider'
+import logOnRender from '../../Functions/logOnRender'
 
 export default function AssetCard({ asset, index }) {
+    logOnRender('AssetCard')
     const { personalStocks, personalCryptos } =
         React.useContext(PersonalAssetsProvider)
 

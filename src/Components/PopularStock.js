@@ -3,8 +3,10 @@ import StockCard from './StockCard'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'
 import fetchPopularStocks from '../Functions/fetchPopularStocks.js'
+import logOnRender from '../Functions/logOnRender'
 
 export default function PopularStock() {
+    logOnRender('PopularStock')
     // format:
     // change: -1.0347117
     // name: "Apple Inc."

@@ -1,89 +1,68 @@
 import React from 'react'
-import { PageProvider}  from '../ContextProvider'
+import { PageProvider } from '../ContextProvider'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../../Functions/framerVariants'
 import { v4 as uuidv4 } from 'uuid'
+import logOnRender from '../../Functions/logOnRender'
+
+// importing stocks and cryptos list
+import cryptoList from '../../JSON/cryptos100.json'
+import stockList from '../../JSON/stocksNYSE.json'
+import InputRadio from '../AddAssetForm/InputRadio'
+
+function getStocksList() {
+    const RV = []
+    stockList.forEach((el) => RV.push(el.name))
+    return RV
+}
+
+function getCryptoList() {
+    const RV = []
+    cryptoList.forEach((el) => RV.push(el.name))
+    return RV
+}
 
 const regNumber = /(\d|\.|,){1,}/
 const regValidNumber = /^-?(0|[1-9]\d*)((\.|,)\d+)?$/
 
-export default function AddAssetModal({allCryptosList, allStocksList, personalAssets, setPersonalAssets, syncLS}) {
+function formReducer(state, event) {
+    return {
+        ...state,
+        [event.name]: event.value,
+    }
+}
 
-    console.log('%cAll cryptos list form AddAssetModal component', 'color:green; font-weight: bold')
-    console.dir(allCryptosList)
+export default function AddAssetModal({
+    personalAssets,
+    setPersonalAssets,
+    syncLS,
+}) {
+    logOnRender('AddAssetModal')
+    const [formData, setFormData] = React.useReducer(formReducer, {
+        assetType: 'stock',
+    })
     const { page, setPage } = React.useContext(PageProvider)
+    const cryptoList = getCryptoList()
+    const stockList = getStocksList()
 
-    const [name, setName] = React.useState()
-    const [price, setPrice] = React.useState()
-    const [volume, setVolume] = React.useState()
-    const [type, setType] = React.useState('crypto')
-    const [isError1visible, setIsError1visible] = React.useState('none')
-    const [isError2visible, setIsError2visible] = React.useState('none')
-    const [isError3visible, setIsError3visible] = React.useState('none')
+    const [errorCount, setErrorCount] = React.useState([false, false, false])
 
-    function submitForm(e) {
-        // pattern matching to ensure proper data
-        if (!name) {
-            setIsError1visible('block')
-            console.log('name bad')
-            return
-        } else {
-            setIsError1visible('none')
-        }
-        if (!regValidNumber.test(price)) {
-            setIsError2visible('block')
-            console.log('price bad')
-            return
-        } else {
-            setIsError2visible('none')
-        }
-        if (!regValidNumber.test(volume)) {
-            setIsError3visible('block')
-            console.log('volume bad')
-            return
-        } else {
-            setIsError3visible('none')
-        }
-
-        // Here I am creating new object from the inputs
-        
-        const asset = {
-            name,
-            type,
-            symbol: getSymbol(type, name),
-            prices: [
-                {
-                    price: price,
-                    volume: volume,
-                },
-            ],
-        }
-        // Store new asset in react state with prev assets
-        if (!personalAssets) {
-            setPersonalAssets([asset])
-        } else {
-            setPersonalAssets(personalAssets => [...personalAssets, asset])
-        }
-        syncLS(personalAssets)
-        // Now I need to clear all the inputs
-        setName('')
-        setVolume('')
-        setPrice('')
-        // And returning to 'safe' page
-        setTimeout(() => setPage('safe'), 350)
+    function submitForm(event) {
+        event.preventDefault()
+        console.dir(formData)
     }
 
     function getSymbol(type, name) {
         if (type === 'crypto') {
             // I am filtering whole crypto list to create an array with a proper name
-            const obj = allCryptosList?.filter((item) => {
+            const obj = cryptoList.filter((item) => {
                 return name === item.name
             })
             // returning its symbol
             return obj[0].symbol
         }
         if (type === 'stock') {
-            const obj = allStocksList?.filter((item) => {
+            const obj = stockList.filter((item) => {
                 return name === item.name
             })
             // returning its symbol
@@ -102,12 +81,23 @@ export default function AddAssetModal({allCryptosList, allStocksList, personalAs
         return filtered
     }
 
-    function handleChange (e) {
-        const { value } = e.target;
-        setType(value)}
+    function handleChange(event) {
+        setFormData({
+            name: event.target.name,
+            value: event.target.value,
+        })
+        console.dir(formData)
+    }
+
+    function handleRadio(val) {
+        setFormData({
+            name: 'assetType',
+            value: val,
+        })
+    }
 
     return (
-        <motion.div
+        <div
             className='page add-asset-modal'
             initial={pageAnimation.hidden}
             animate={pageAnimation.visible}
@@ -115,61 +105,52 @@ export default function AddAssetModal({allCryptosList, allStocksList, personalAs
             transition={pageAnimation.transition}>
             <h1>Add new equity</h1>
             <form>
-                <div>
-                    <p>Choose your equity type:</p>
-                    <div className='form__radio-container'>
-                        <input
-                            type='radio'
-                            name='assettype'
-                            id='radio-crypto'
-                            value='crypto'
-                            required
-                            onChange={handleChange}
-                        />
-                        <label htmlFor='radio-crypto'>Cryptocurrency</label>
-                    </div>
-
-                    <div className='form__radio-container'>
-                        <input
-                            type='radio'
-                            name='assettype'
-                            id='radio-stock'
-                            value='stock'
-                            required
-                            onChange={handleChange}
-                        />
-                        <label htmlFor='radio-stock'>Stock</label>
-                    </div>
-                </div>
+                <fieldset>
+                    <legend>Choose your equity type:</legend>
+                    <InputRadio
+                        data={{
+                            name: 'assetType',
+                            type: 'crypto',
+                            checked: formData.assetType === 'crypto',
+                            label: 'Cryptocurrency',
+                        }}
+                        functions={{ handleRadio }}
+                    />
+                    <InputRadio
+                        data={{
+                            name: 'assetType',
+                            type: 'stock',
+                            checked: formData.assetType === 'stock',
+                            label: 'Stock',
+                        }}
+                        functions={{ handleRadio }}
+                    />
+                </fieldset>
 
                 <div>
                     <label id='form__list-label' htmlFor='form__list-input'>
                         {`Find your asset in the list below:`}
                     </label>
                     <br />
-                    <input
+                    <select
                         className='form__input'
                         id='form__list-input'
-                        list={`${type}List`}
-                        name='name'
+                        name='assetName'
                         type='list'
                         required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <datalist id='cryptoList'>
-                        {allCryptosList?.map((item) => {
-                            return <option key={uuidv4()} value={item.name} />
-                        })}
-                    </datalist>
-                    <datalist id='stockList'>
-                        {allStocksList?.map((item) => {
-                            return <option key={uuidv4()} value={item.name} />
-                        })}
-                    </datalist>
+                        value={formData.assetName || ''}
+                        onChange={handleChange}>
+                        {formData.assetType === 'crypto' &&
+                            cryptoList.map((item) => <option>{item}</option>)}
+                        {formData.assetType === 'stock' &&
+                            stockList.map((item) => <option>{item}</option>)}
+                    </select>
                     <p
                         className='form__error'
-                        style={{ '--display': isError1visible }}>
+                        style={{
+                            '--display':
+                                errorCount[0] === true ? 'block' : 'none',
+                        }}>
                         You need to choose an equity
                         <br />
                         from the list above.
@@ -183,18 +164,21 @@ export default function AddAssetModal({allCryptosList, allStocksList, personalAs
                     <br />
                     <input
                         className='form__input'
-                        type='value'
+                        type='number'
+                        pattern='^\d*(\.\d{0,8})?$'
                         id='form__price-input'
                         required
+                        name='assetPrice'
                         autoComplete='off'
-                        value={price}
-                        onChange={(e) =>
-                            setPrice(getValidCharacters(e.target.value))
-                        }
+                        value={formData.assetPrice || ''}
+                        onChange={handleChange}
                     />
                     <p
                         className='form__error'
-                        style={{ '--display': isError2visible }}>
+                        style={{
+                            '--display':
+                                errorCount[1] === true ? 'block' : 'none',
+                        }}>
                         You need to enter a price
                         <br />
                         that is a valid number.
@@ -208,17 +192,20 @@ export default function AddAssetModal({allCryptosList, allStocksList, personalAs
                     <br />
                     <input
                         className='form__input'
-                        type='text'
+                        type='number'
                         id='form__vol-input'
                         required
                         autoComplete='off'
-                        onChange={(e) =>
-                            setVolume(getValidCharacters(e.target.value))
-                        }
+                        name='assetVolume'
+                        value={formData.assetVolume}
+                        onChange={handleChange}
                     />
                     <p
                         className='form__error'
-                        style={{ '--display': isError3visible }}>
+                        style={{
+                            '--display':
+                                errorCount[2] === true ? 'block' : 'none',
+                        }}>
                         You need to specify how many <br />
                         coins/shares you have bought.
                     </p>
@@ -227,6 +214,6 @@ export default function AddAssetModal({allCryptosList, allStocksList, personalAs
             <button onClick={submitForm} className='form__submit'>
                 Submit
             </button>
-        </motion.div>
+        </div>
     )
 }

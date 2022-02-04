@@ -3,8 +3,11 @@ import { motion } from 'framer-motion'
 import { pageAnimation } from '../../Functions/framerVariants'
 import AssetCard from './AssetCard'
 import { v4 as uuidv4 } from 'uuid'
+import logOnRender from '../../Functions/logOnRender'
+
 
 export default function Safe({ personalAssets, setPage, syncLS }) {
+    logOnRender('LandingPage')
     function AddAsset() {
         return (
             <button

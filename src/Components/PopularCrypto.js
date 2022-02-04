@@ -1,5 +1,4 @@
 import React from 'react'
-import { PopularCryptosAndStocksProvider } from './ContextProvider'
 import CryptoCard from './CryptoCard'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'

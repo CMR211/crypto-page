@@ -340,6 +340,10 @@
 .add-asset-modal {
   width: auto;
 }
+.add-asset-modal fieldset {
+  border: none;
+  margin-bottom: 1rem;
+}
 .add-asset-modal button,
 .add-asset-modal input,
 .add-asset-modal select,
@@ -392,6 +396,11 @@
 }
 .add-asset-modal button:hover {
   transform: scale(1.1);
+}
+.add-asset-modal select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
 }
 
 .form__error {

@@ -35,7 +35,6 @@ export default async function fetchPopularStocks(setterFn, loadingFn) {
             stocks.push(stock)
         })
         setterFn(stocks)
-        console.log(stocks)
         // format:
         // change: -1.0347117
         // name: "Apple Inc."

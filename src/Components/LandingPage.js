@@ -2,9 +2,10 @@ import React from 'react'
 import { PageProvider } from './ContextProvider'
 import { motion } from 'framer-motion'
 import { pageAnimation } from '../Functions/framerVariants'
+import logOnRender from '../Functions/logOnRender'
 
 export default function LandingPage() {
-    console.log('Rendering LandingPage')
+    logOnRender('LandingPage')
     const { setPage } = React.useContext(PageProvider)
 
     return (
