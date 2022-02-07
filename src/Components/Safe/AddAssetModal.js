@@ -10,13 +10,13 @@ import cryptoList from '../../JSON/cryptos100.json'
 import stockList from '../../JSON/stocksNYSE.json'
 import InputRadio from '../AddAssetForm/InputRadio'
 
-function getStocksList() {
+function getStockNames() {
     const RV = []
     stockList.forEach((el) => RV.push(el.name))
     return RV
 }
 
-function getCryptoList() {
+function getCryptoNames() {
     const RV = []
     cryptoList.forEach((el) => RV.push(el.name))
     return RV
@@ -39,20 +39,33 @@ export default function AddAssetModal({
 }) {
     logOnRender('AddAssetModal')
     const [formData, setFormData] = React.useReducer(formReducer, {
-        assetType: 'stock',
+        assetType: 'crypto',
+        assetName: 'Bitcoin'
     })
     const { page, setPage } = React.useContext(PageProvider)
-    const cryptoList = getCryptoList()
-    const stockList = getStocksList()
+    const cryptoNames = getCryptoNames()
+    const stockNames = getStockNames()
 
     const [errorCount, setErrorCount] = React.useState([false, false, false])
 
     function submitForm(event) {
         event.preventDefault()
-        console.dir(formData)
+        const asset = {
+            name: formData.assetName,
+            symbol: getSymbol(formData.assetType, formData.assetName),
+            prices: [
+                {price: formData.assetPrice, volume: formData.assetVolume}
+            ],
+            type: formData.assetType,
+        }
+        const LS = localStorage.getItem('assets')
+        console.log(LS)
+        if (!LS) localStorage.setItem('assets', JSON.stringify([asset]))
+        else localStorage.setItem('assets', [...LS, JSON.stringify(asset)])
     }
 
     function getSymbol(type, name) {
+        console.log(stockList)
         if (type === 'crypto') {
             // I am filtering whole crypto list to create an array with a proper name
             const obj = cryptoList.filter((item) => {
@@ -86,7 +99,6 @@ export default function AddAssetModal({
             name: event.target.name,
             value: event.target.value,
         })
-        console.dir(formData)
     }
 
     function handleRadio(val) {
@@ -141,9 +153,9 @@ export default function AddAssetModal({
                         value={formData.assetName || ''}
                         onChange={handleChange}>
                         {formData.assetType === 'crypto' &&
-                            cryptoList.map((item) => <option>{item}</option>)}
+                            cryptoNames.map((item) => <option>{item}</option>)}
                         {formData.assetType === 'stock' &&
-                            stockList.map((item) => <option>{item}</option>)}
+                            stockNames.map((item) => <option>{item}</option>)}
                     </select>
                     <p
                         className='form__error'

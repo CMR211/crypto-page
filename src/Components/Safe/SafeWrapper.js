@@ -11,14 +11,14 @@ function getNames(input, type) {
         .filter((i) => {
             return i.type === type
         })
-        .reduce((p, c) => p + c.name + ', ', '')
+        .reduce((p, c) => p + c.symbol + ', ', '')
         .slice(0, -2)
     return temp
 }
 
 function getPersonalAssetsFromLS() {
     if (!localStorage.getItem('assets')) return
-    console.dir(localStorage.getItem('assets'))
+    console.dir(JSON.parse(localStorage.getItem('assets')))
     return JSON.parse(localStorage.getItem('assets'))
 }
 
@@ -41,8 +41,10 @@ export default function SafeWrapper() {
     }, [])
 
     React.useEffect(() => {
+        console.log(personalAssets)
         if (personalAssets) {
-            getNames(personalAssets, 'crypto').forEach((i) =>
+            const cryptoSymbols = getNames(personalAssets, 'crypto')
+            cryptoSymbols.forEach((i) =>
                 listOfAssetsToFetch.cryptos.push(i.name)
             )
             getNames(personalAssets, 'stock').forEach((i) =>

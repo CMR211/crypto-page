@@ -4,8 +4,6 @@ import logOnRender from '../../Functions/logOnRender'
 
 export default function AssetCard({ asset, index }) {
     logOnRender('AssetCard')
-    const { personalStocks, personalCryptos } =
-        React.useContext(PersonalAssetsProvider)
 
     const { name, type, symbol, prices } = asset
 
@@ -20,19 +18,7 @@ export default function AssetCard({ asset, index }) {
 
     function getCurrentPrice() {
         return 2000
-        // console.table(personalCryptosPrices)
-        if (type === 'crypto') {
-            const t = personalCryptos.filter(
-                (item) => item.name === name
-            )[0].usd
-            return t
-        }
-        if (type === 'stock') {
-            const t = personalStocks.filter(
-                (item) => item.name === name
-            )[0].usd
-            return t
-        }
+        
     }
 
     const profit =
