@@ -2,8 +2,9 @@ import React from 'react'
 import {PersonalAssetsProvider} from '../ContextProvider'
 import logOnRender from '../../Functions/logOnRender'
 
-export default function AssetCard({ asset, index }) {
+export default function AssetCard({ asset, index, assetPrices }) {
     logOnRender('AssetCard')
+
 
     const { name, type, symbol, prices } = asset
 
@@ -17,8 +18,8 @@ export default function AssetCard({ asset, index }) {
         ) / 100
 
     function getCurrentPrice() {
-        return 2000
-        
+        if (type === 'crypto') return assetPrices.filter(i => i.symbol === symbol + '-USD')[0].regularMarketPrice
+        if (type === 'stock') return assetPrices.filter(i => i.symbol === symbol)[0].regularMarketPrice
     }
 
     const profit =

@@ -58,14 +58,13 @@ export default function AddAssetModal({
             ],
             type: formData.assetType,
         }
-        const LS = localStorage.getItem('assets')
-        console.log(LS)
+        const LS = JSON.parse(localStorage.getItem('assets'))
         if (!LS) localStorage.setItem('assets', JSON.stringify([asset]))
-        else localStorage.setItem('assets', [...LS, JSON.stringify(asset)])
+        else localStorage.setItem('assets', JSON.stringify([...LS, asset]))
+        setPage('safe')
     }
 
     function getSymbol(type, name) {
-        console.log(stockList)
         if (type === 'crypto') {
             // I am filtering whole crypto list to create an array with a proper name
             const obj = cryptoList.filter((item) => {

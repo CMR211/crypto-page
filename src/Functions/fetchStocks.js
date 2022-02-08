@@ -1,5 +1,6 @@
 import axios from 'axios'
-export default function fetchStocks(stocks, callbackFn) {
+export default function fetchStocks(stocks, setterFn, loadingFn) {
+    loadingFn(true)
     const options = {
         method: 'GET',
         url: 'https://alpha-vantage.p.rapidapi.com/query',
@@ -13,14 +14,16 @@ export default function fetchStocks(stocks, callbackFn) {
         },
         headers: {
             'x-rapidapi-host': 'alpha-vantage.p.rapidapi.com',
-            'x-rapidapi-key': '044f218bf5msh695d9c96153799bp1c58eejsn7e16c29df7a0'
+            'x-rapidapi-key':
+                '044f218bf5msh695d9c96153799bp1c58eejsn7e16c29df7a0',
         },
     }
 
     axios
         .request(options)
         .then(function (response) {
-            callbackFn(response)
+            setterFn(response)
+            loadingFn(false)
         })
         .catch(function (error) {
             console.error(error)

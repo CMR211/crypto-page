@@ -6,52 +6,26 @@ import { v4 as uuidv4 } from 'uuid'
 import logOnRender from '../../Functions/logOnRender'
 import { AnimatePresence } from 'framer-motion'
 
-function getNames(input, type) {
-    const temp = input
-        .filter((i) => {
-            return i.type === type
-        })
-        .reduce((p, c) => p + c.symbol + ', ', '')
-        .slice(0, -2)
-    return temp
-}
-
 function getPersonalAssetsFromLS() {
     if (!localStorage.getItem('assets')) return
-    console.dir(JSON.parse(localStorage.getItem('assets')))
     return JSON.parse(localStorage.getItem('assets'))
 }
 
-export default function SafeWrapper() {
+export default function SafeWrapper({PA}) {
     logOnRender('SafeWrapper')
-
     const { page, setPage } = React.useContext(PageProvider)
+    const [personalAssets, setPersonalAssets] = React.useState(PA)
 
-    const [personalAssets, setPersonalAssets] = React.useState(
-        getPersonalAssetsFromLS()
-    )
-
-    const listOfAssetsToFetch = {
-        cryptos: [],
-        stocks: [],
+    function returnSymbolsToFetch() {
+        const str = personalAssets
+            .map((asset) => {
+                if (asset.type === 'crypto') return asset.symbol + '-USD'
+                if (asset.type === 'stock') return asset.symbol
+            })
+            .join(',')
+            console.log(str)
+        return str
     }
-
-    React.useEffect(() => {
-        setPersonalAssets(getPersonalAssetsFromLS())
-    }, [])
-
-    React.useEffect(() => {
-        console.log(personalAssets)
-        if (personalAssets) {
-            const cryptoSymbols = getNames(personalAssets, 'crypto')
-            cryptoSymbols.forEach((i) =>
-                listOfAssetsToFetch.cryptos.push(i.name)
-            )
-            getNames(personalAssets, 'stock').forEach((i) =>
-                listOfAssetsToFetch.stocks.push(i.name)
-            )
-        }
-    }, [personalAssets])
 
     function syncLS() {
         localStorage.setItem('assets', JSON.stringify(personalAssets))
@@ -64,7 +38,7 @@ export default function SafeWrapper() {
                     key={uuidv4()}
                     personalAssets={personalAssets}
                     setPage={setPage}
-                    listOfAssetsToFetch={listOfAssetsToFetch}
+                    symbolsToFetch={returnSymbolsToFetch()}
                 />
             )}
             {page === 'add' && (
