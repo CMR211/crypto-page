@@ -1,9 +1,15 @@
-.page{
-  margin: 2rem;
-  max-width: 40rem;
-  width: calc(100% - 4rem);
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 3rem;
-  border-radius: 1rem;
+.page {
+    margin: 2rem;
+    max-width: 40rem;
+    width: calc(100% - 4rem);
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 3rem;
+    border-radius: 1rem;
+}
+
+@media (max-width: 500px) {
+    .page {
+        padding: 1.5rem;
+    }
 }

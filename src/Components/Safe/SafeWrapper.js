@@ -6,24 +6,19 @@ import { v4 as uuidv4 } from 'uuid'
 import logOnRender from '../../Functions/logOnRender'
 import { AnimatePresence } from 'framer-motion'
 
-function getPersonalAssetsFromLS() {
-    if (!localStorage.getItem('assets')) return
-    return JSON.parse(localStorage.getItem('assets'))
-}
-
 export default function SafeWrapper({PA}) {
     logOnRender('SafeWrapper')
     const { page, setPage } = React.useContext(PageProvider)
     const [personalAssets, setPersonalAssets] = React.useState(PA)
 
     function returnSymbolsToFetch() {
+        if (!personalAssets) return null
         const str = personalAssets
             .map((asset) => {
                 if (asset.type === 'crypto') return asset.symbol + '-USD'
                 if (asset.type === 'stock') return asset.symbol
             })
             .join(',')
-            console.log(str)
         return str
     }
 
@@ -37,6 +32,7 @@ export default function SafeWrapper({PA}) {
                 <Safe
                     key={uuidv4()}
                     personalAssets={personalAssets}
+                    setPersonalAssets={setPersonalAssets}
                     setPage={setPage}
                     symbolsToFetch={returnSymbolsToFetch()}
                 />

@@ -7,6 +7,7 @@ import fetchSafe from '../../Functions/fetchSafe'
 
 export default function Safe({
     personalAssets,
+    setPersonalAssets,
     setPage,
     syncLS,
     symbolsToFetch,
@@ -27,6 +28,7 @@ export default function Safe({
     }
 
     function getPersonalAssets() {
+        if (!personalAssets) return null
         if (personalAssets) {
             const mappedAssets = personalAssets.map((asset, index) => {
                 return (
@@ -35,7 +37,9 @@ export default function Safe({
                         key={asset.symbol}
                         index={index}
                         syncLC={syncLS}
-                        assetsPrice={assetsPrices}
+                        assetsPrices={assetsPrices}
+                        personalAssets={personalAssets}
+                        setPersonalAssets={setPersonalAssets}
                     />
                 )
             })
@@ -44,7 +48,10 @@ export default function Safe({
     }
 
     React.useEffect(() => {
-        if (assetsPrices) return
+        if (assetsPrices || !symbolsToFetch) {
+            setIsLoading(false)
+            return
+        }
         fetchSafe(symbolsToFetch, setAssetsPrices, setIsLoading)
     }, [])
 

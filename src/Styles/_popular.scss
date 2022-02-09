@@ -1,80 +1,99 @@
 .popular {
-  max-width: 45rem;
-  h1 {
-    margin-bottom: 2rem;
-  }
+    max-width: 45rem;
+    h1 {
+        margin-bottom: 2rem;
+    }
 }
 
 .popular__container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  // justify-items: flex-start;
-  justify-items: stretch;
-  row-gap: 2rem;
-  column-gap: 3rem;
-
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    // justify-items: flex-start;
+    justify-items: stretch;
+    row-gap: 2rem;
+    column-gap: 3rem;
 }
 
 .popular-card {
+    display: grid;
+    column-gap: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    grid-template-columns: 60px 1fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    justify-content: center;
+    align-content: center;
+    justify-items: flex-start;
+    align-items: center;
+    cursor: pointer;
+    transition: 300ms ease-in-out;
 
-  display: grid;
-  column-gap: 1rem;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  grid-template-columns: 60px 1fr 1fr;
-  grid-template-rows: repeat(2, 1fr);
-  justify-content: center;
-  align-content: center;
-  justify-items: flex-start;
-  align-items: center;
-  cursor: pointer;
-  transition: 300ms ease-in-out;
-
-  &:hover {
-    background-color: $color-accent-1b;
-    transform: scale(1.05)
-  }
-
-  &__link {
-    display: block;
-    text-decoration: none;
-    color: inherit
-  }
-
-  &__icon {
-    align-self: center;
-    justify-self: center;
-    width: 100%;
-    grid-row: 1 / span 2;
-    grid-column: 1;
-  }
-
-  &__title {
-    grid-column: 2 / span 2;
-    letter-spacing: 2px;
-  }
-
-  &__title--stock {
-    grid-column: 2 / span 2;
-    line-height: 1.1;
-    &name {
-      font-size: 0.7rem;
+    &:hover {
+        background-color: $color-accent-1b;
+        transform: scale(1.05);
     }
-  }
 
-  &__price {
-    font-size: 1.3rem;
-
-    &__usd {
-      font-size: 0.8rem;
-      margin-left: 0.3rem;
+    &__link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
     }
-  }
 
-  &__change {
-    justify-self: flex-end;
-    font-weight: 600;
-    &-red { color: red }
-    &-green { color: green }
-  }
+    &__icon {
+        align-self: center;
+        justify-self: center;
+        width: 100%;
+        grid-row: 1 / span 2;
+        grid-column: 1;
+    }
+
+    &__title {
+        grid-column: 2 / span 2;
+        letter-spacing: 2px;
+    }
+
+    &__title--stock {
+        grid-column: 2 / span 2;
+        line-height: 1.1;
+        &name {
+            font-size: 0.7rem;
+        }
+    }
+
+    &__price {
+        font-size: 1.3rem;
+
+        &__usd {
+            font-size: 0.8rem;
+            margin-left: 0.3rem;
+        }
+    }
+
+    &__change {
+        justify-self: flex-end;
+        font-weight: 600;
+        &-red {
+            color: red;
+        }
+        &-green {
+            color: green;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .popular-container {
+        align-items: start;
+    }
+    .popular-card {
+        &__title {
+            font-size: 16px;
+        }
+        &__price {
+            font-size: 14px;
+        }
+        &__change {
+            font-size: 12px;
+        }
+    }
 }

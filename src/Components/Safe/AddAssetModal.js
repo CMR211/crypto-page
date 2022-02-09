@@ -13,7 +13,11 @@ import InputRadio from '../AddAssetForm/InputRadio'
 function getStockNames() {
     const RV = []
     stockList.forEach((el) => RV.push(el.name))
-    return RV
+    return RV.sort((first, second) => {
+        if (first.toUpperCase() < second.toUpperCase()) return -1
+        if (first.toUpperCase() > second.toUpperCase()) return 1
+        return 0
+    })
 }
 
 function getCryptoNames() {

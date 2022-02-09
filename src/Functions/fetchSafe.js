@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export default async function fetchPopularStocks(query, setterFn, loadingFn) {
+export default async function fetchSafe(query, setterFn, loadingFn) {
     // this function fetches popular stocks
     // it takes 2 functions as arguments:
     // - setterFn is the react set function from React.useState()
@@ -8,7 +8,7 @@ export default async function fetchPopularStocks(query, setterFn, loadingFn) {
     // - loadingFn is react set state function representing loading state in a component
 
     loadingFn(true)
-    const popularStocksFetchOptions = {
+    const fetchOptions = {
         method: 'GET',
         url: 'https://stock-data-yahoo-finance-alternative.p.rapidapi.com/v6/finance/quote',
         params: { symbols: query },
@@ -22,22 +22,21 @@ export default async function fetchPopularStocks(query, setterFn, loadingFn) {
     }
 
     try {
-        const response = await axios.request(popularStocksFetchOptions)
+        const response = await axios.request(fetchOptions)
         console.log(response)
         const array = await response.data.quoteResponse.result
-        const assets = []
-        array.forEach((item) => {
-            const stock = {
-                symbol: item.symbol,
-                name: item.shortName,
-                price: item.regularMarketOpen,
-                change: item.regularMarketChangePercent,
+        const assets = array.map(fetchedItem => {return (
+            {
+                symbol: fetchedItem.symbol,
+                name: fetchedItem.shortName,
+                price: fetchedItem.regularMarketOpen,
+                change: fetchedItem.regularMarketChangePercent,
+                image: fetchedItem.coinImageUrl,
             }
-            assets.push(stock)
-        })
+        )})
         setterFn(assets)
         loadingFn(false)
     } catch (e) {
-        console.error('Fetching Popular Stocks failed.', e)
+        console.error('Fetching personal assets data failed.', e)
     }
 }
