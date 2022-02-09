@@ -135,7 +135,7 @@
         }
         &__title {
             grid-row: 2;
-            margin-top: 0.5rem;
+            margin-top: 7vw;
         }
         &__have {
             grid-row: 3;
@@ -147,7 +147,7 @@
         }
         &__change {
             grid-row: 1;
-            font-size: 12px;
+            font-size: 14px;
         }
         &__current {
             grid-row: 4;
@@ -157,7 +157,7 @@
             grid-row: 1;
             position: absolute;
             top: 0;
-            left: 3rem;
+            left: 15vw;
         }
     }
 }
